@@ -11,6 +11,11 @@ const getGoals = (req, res) => {
 // @route PUT /api/goal
 // @access PRIVATE
 const setGoal = (req, res) => {
+    if (!req.body.text) {
+        res.status(400)
+        // to use Express error Handler but we already override it 
+        throw new Error("Please add text field")
+    }
     res.status(200).json({ message: 'Create Goal' })
 }
 
