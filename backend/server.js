@@ -1,8 +1,12 @@
 const express = require('express')
+const colors = require('colors')
 const dotenv = require('dotenv').config()
 const port = process.env.PORT || 5000
 const { errorHandler } = require('./middleware/errorMiddleware')
+const connectDB = require('./config/db')
 const app = express()
+
+connectDB()
 
 // To use req.body we have to add below body parser middleware
 app.use(express.json())
