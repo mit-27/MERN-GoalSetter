@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Here we use route which define in routes folder 
 app.use('/api/goals', require('./routes/goalRoutes'))
+app.use('/api/users', require('./routes/userRoutes'))
 
 // Add new errorHandler middleware - which overwrites express default error Handler
 app.use(errorHandler)
