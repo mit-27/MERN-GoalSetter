@@ -8,12 +8,13 @@ const asyncHandler = require('express-async-handler')
 
 // Import Model
 const Goal = require('../models/goalModel')
+const User = require('../models/userModel')
 
 // @desc Get goals
 // @route GET /api/goal
 // @access PRIVATE
 const getGoals = asyncHandler(async (req, res) => {
-    const goals = await Goal.find({})
+    const goals = await Goal.find({ user: req.user.id })
     res.status(200).json(goals)
 })
 
@@ -28,7 +29,8 @@ const setGoal = asyncHandler(async (req, res) => {
     }
 
     const goal = await Goal.create({
-        text: req.body.text
+        text: req.body.text,
+        user: req.user.id
     })
     res.status(200).json(goal)
 })
@@ -43,6 +45,20 @@ const updateGoal = asyncHandler(async (req, res) => {
     if (!goal) {
         res.status(400)
         throw new Error("Please provide valid id")
+    }
+
+    const loggedInUser = await User.findById(req.user.id)
+
+    // check whether user present in db 
+    if (!loggedInUser) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    // make sure logged in user matches the goal user
+    if (goal.user.toString() !== loggedInUser.id) {
+        res.status(401)
+        throw new Error('User not Authorized')
     }
 
     // update fetched doc
@@ -62,6 +78,20 @@ const deleteGoal = asyncHandler(async (req, res) => {
     if (!goal) {
         res.status(400)
         throw new Error("Please provide valid id")
+    }
+
+    const loggedInUser = await User.findById(req.user.id)
+
+    // check whether user present in db 
+    if (!loggedInUser) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+
+    // make sure logged in user matches the goal user
+    if (goal.user.toString() !== loggedInUser.id) {
+        res.status(401)
+        throw new Error('User not Authorized')
     }
 
     await goal.remove()

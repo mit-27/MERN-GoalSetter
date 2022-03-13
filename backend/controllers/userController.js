@@ -86,7 +86,7 @@ const loginUser = asyncHandler(async (req, res) => {
 // @access Private
 const getMe = asyncHandler(async (req, res) => {
     // Here we directly get user data as we assign user in req in authMiddleware
-    const { _id, email, name } = await User.findById(req.userID)
+    const { _id, email, name } = await User.findById(req.user.id)
 
     res.json({
         id: _id,

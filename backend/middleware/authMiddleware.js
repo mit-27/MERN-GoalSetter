@@ -15,10 +15,10 @@ const protect = asyncHandler(async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
             // Get User from the token without password field and store it in req so that t could use in Private controller
-            // req.user = await User.findById(decoded.id).select('-password')
+            req.user = await User.findById(decoded.id).select('-password')
 
-            // Only assign id in req as we fetch user in getMe controller
-            req.userID = decoded.id
+            // // Only assign id in req as we fetch user in getMe controller
+            // req.userID = decoded.id
 
             next()
 
